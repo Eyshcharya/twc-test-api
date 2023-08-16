@@ -1,7 +1,12 @@
 import express from 'express';
-
+import router from './Routes/route.js';
+import { config } from 'dotenv';
+config();
 const app = express();
 
-app.listen(5000, () => {
+// router
+app.use('/', router);
+
+app.listen(process.env.PORT || 5000, () => {
   console.log(`Server Running...`);
 });
