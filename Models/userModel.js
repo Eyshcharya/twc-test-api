@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  contacts: { type: Array, default: [] },
 });
 
 userSchema.pre('save', async function (next) {
@@ -18,5 +19,10 @@ userSchema.pre('save', async function (next) {
     throw new Error(error);
   }
 });
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 const User = mongoose.model('user', userSchema);
 export { User };
