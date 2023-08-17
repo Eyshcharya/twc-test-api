@@ -1,8 +1,19 @@
 import express from 'express';
 const router = express.Router();
 
-import { userRegister } from '../Controllers/actionController.js';
+import { userRegister, userLogin } from '../Controllers/actionController.js';
+import {
+  getContacts,
+  createContact,
+  updateContact,
+} from '../Controllers/dataController.js';
 
-// action routes
 router.post('/register', userRegister);
+router.post('/login', userLogin);
+router
+  .route('/contacts/:email')
+  .get(getContacts)
+  .post(createContact)
+  .put(updateContact);
+
 export default router;
