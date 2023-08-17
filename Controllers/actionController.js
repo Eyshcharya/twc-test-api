@@ -26,4 +26,22 @@ const userRegister = asyncHandler(async (req, res) => {
   }
 });
 
-export { userRegister };
+// Login controller
+// route   /login
+// request POST
+// access  public
+const userLogin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.status(201).json({
+      message: 'Login Success',
+    });
+  } else {
+    res.status(401);
+    throw new Error(`Invalid Email or Password`);
+  }
+});
+
+export { userRegister, userLogin };
