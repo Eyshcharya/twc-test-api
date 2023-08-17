@@ -1,11 +1,22 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const contactSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  phone: { type: Number, required: true },
-  gender: { type: String, required: true },
+  password: { type: String, required: true },
 });
 
-const Contact = mongoose.model('contact', contactSchema);
-export { Contact };
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    return next();
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+const User = mongoose.model('user', userSchema);
+export { User };
