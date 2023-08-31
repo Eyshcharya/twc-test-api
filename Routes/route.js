@@ -1,19 +1,19 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
 
-import { userRegister, userLogin } from '../Controllers/actionController.js';
+import { userRegister, userLogin } from "../Controllers/actionController.js";
 import {
   getContacts,
   createContact,
   updateContact,
-} from '../Controllers/dataController.js';
+} from "../Controllers/dataController.js";
 
-router.post('/register', userRegister);
-router.post('/login', userLogin);
+router.post("/register", userRegister);
+router.post("/login", userLogin);
 router
-  .route('/contacts/:email')
+  .route("/contacts/:email")
   .get(getContacts)
   .post(createContact)
-  .put(updateContact);
+  .patch(updateContact);
 
 export default router;
