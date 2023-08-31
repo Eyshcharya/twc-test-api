@@ -9,8 +9,8 @@ const userRegister = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const userExist = await User.findOne({ email });
   if (userExist) {
-    res.status(400).json({ message: "user already Exists" });
-    throw new Error("User Already Exists");
+    res.status(400).json({ message: "User already exist" });
+    throw new Error("User Already Exist");
   }
   const user = await User.create({
     email,
@@ -18,10 +18,10 @@ const userRegister = asyncHandler(async (req, res) => {
   });
   if (user) {
     res.status(201).json({
-      user,
+      message: "Register Successful!",
     });
   } else {
-    res.status(400);
+    res.status(400).json({ message: "Invalid user data" });
     throw new Error(`Invalid User Data`);
   }
 });
@@ -44,4 +44,15 @@ const userLogin = asyncHandler(async (req, res) => {
   }
 });
 
-export { userRegister, userLogin };
+// Logout controller
+// route   /
+// request POST
+// access  private
+const userLogout = asyncHandler(async (req, res) => {
+  // res.cookie('jwt', '', {
+  //   httpOnly: true,
+  //   expires: new Date(0),
+  // });
+  res.status(201).json({ message: " User Logged Out" });
+});
+export { userRegister, userLogin, userLogout };
