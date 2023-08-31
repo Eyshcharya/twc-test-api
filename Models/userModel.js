@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
   contacts: { type: Array, default: [] },
 });
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
   try {
@@ -24,5 +24,5 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model("user", userSchema);
 export { User };
