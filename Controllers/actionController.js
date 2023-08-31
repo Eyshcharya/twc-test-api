@@ -1,5 +1,5 @@
-import asyncHandler from 'express-async-handler';
-import { User } from '../Models/userModel.js';
+import asyncHandler from "express-async-handler";
+import { User } from "../Models/userModel.js";
 
 // Register controller
 // route   /register
@@ -9,8 +9,8 @@ const userRegister = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const userExist = await User.findOne({ email });
   if (userExist) {
-    res.status(400);
-    throw new Error('User Already Exists');
+    res.status(400).json({ message: "user already Exists" });
+    throw new Error("User Already Exists");
   }
   const user = await User.create({
     email,
@@ -36,10 +36,10 @@ const userLogin = asyncHandler(async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {
     res.status(201).json({
-      message: 'Login Success',
+      message: "Login Successful!",
     });
   } else {
-    res.status(401);
+    res.status(401).json({ message: "Invalid Email or Password!" });
     throw new Error(`Invalid Email or Password`);
   }
 });
