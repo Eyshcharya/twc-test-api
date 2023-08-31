@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
 
-import { userRegister, userLogin } from "../Controllers/actionController.js";
+import {
+  userRegister,
+  userLogin,
+  userLogout,
+} from "../Controllers/actionController.js";
 import {
   getContacts,
   createContact,
@@ -15,5 +19,6 @@ router
   .get(getContacts)
   .post(createContact)
   .patch(updateContact);
+router.route("/").post(userLogout);
 
 export default router;
