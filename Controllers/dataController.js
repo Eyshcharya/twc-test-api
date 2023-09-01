@@ -31,6 +31,27 @@ const getContacts = asyncHandler(async (req, res) => {
   }
 });
 
+// deleteContact controller
+// route   /contacts/:userID
+// request  DELETE
+const deleteContact = asyncHandler(async (req, res) => {
+  const { _id, userID } = req.body;
+
+  try {
+    const result = await User.updateOne(
+      { _id: userID },
+      { $pull: { contacts: { _id: parseFloat(_id) } } }
+    );
+    if (result) {
+      res.status(200).json({ message: "Contact Deleted!" });
+    } else {
+      res.status(400).json({ message: "Failed to delete the contact" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete your contact" });
+  }
+});
+
 // createContact controller
 // route   /contacts/new
 // request  POST
@@ -73,10 +94,20 @@ const createContact = asyncHandler(async (req, res) => {
 });
 
 // updateContact controller
-// route   /contacts/:email
+// route   /contacts/:userID
 // request  PATCH
 const updateContact = asyncHandler(async (req, res) => {
-  const { contactID, name, email, phone, gender } = req.body;
+  const { contactID, name, email, phone, gender, userID } = req.body;
+  const user = await User.findOne({ _id: userID });
+
+  // if (user?.contacts.length > 0) {
+  //   const contactExist = user.contacts.find(
+  //     (contact) => contact.phone === phone
+  //   );
+  //   if (contactExist) {
+  //     return res.status(400).json({ message: "Contact already exist" });
+  //   }
+  // }
 
   try {
     const updatedContact = await User.findOneAndUpdate(
@@ -95,7 +126,7 @@ const updateContact = asyncHandler(async (req, res) => {
     );
 
     if (!updatedContact) {
-      res.status(404).json({ message: "contact not found" });
+      res.status(400).json({ message: "contact not found" });
       throw new Error(`contact not found`);
     }
 
@@ -106,4 +137,4 @@ const updateContact = asyncHandler(async (req, res) => {
   }
 });
 
-export { createContact, getContacts, updateContact, getUser };
+export { createContact, getContacts, updateContact, getUser, deleteContact };
