@@ -1,13 +1,27 @@
 import asyncHandler from "express-async-handler";
 import { User } from "../Models/userModel.js";
 
+// getUser controller
+// route   /
+// request  POST
+const getUser = asyncHandler(async (req, res) => {
+  const email = req.body.email;
+  const user = await User.findOne({ email });
+
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(400).json({ message: "No user data" });
+  }
+});
+
 // getContacts controller
-// route   /contacts/:email
+// route   /contacts/:userID
 // request  GET
 const getContacts = asyncHandler(async (req, res) => {
-  const email = req.params.email;
+  const _id = req.params.userID;
 
-  const user = await User.findOne({ email });
+  const user = await User.findById(_id);
   const contacts = user.contacts;
 
   if (contacts) {
@@ -18,11 +32,11 @@ const getContacts = asyncHandler(async (req, res) => {
 });
 
 // createContact controller
-// route   /contacts/:email
+// route   /contacts/new
 // request  POST
 const createContact = asyncHandler(async (req, res) => {
-  const { userEmail, email, name, phone, gender } = req.body;
-  const user = await User.findOne({ email: userEmail });
+  const { _id, email, name, phone, gender } = req.body;
+  const user = await User.findById(_id);
   const date = new Date();
 
   const contact = {
@@ -39,7 +53,7 @@ const createContact = asyncHandler(async (req, res) => {
         (contact) => contact.phone === phone
       );
       if (contactExist) {
-        res.status(400).json({ message: "contact already exist" });
+        res.status(400).json({ message: "Contact already exist" });
         throw new Error(`contact already exist`);
       }
     }
@@ -47,7 +61,7 @@ const createContact = asyncHandler(async (req, res) => {
     if (contact) {
       user.contacts.unshift(contact);
       await user.save();
-      res.status(201).json(contact);
+      res.status(201).json({ message: "Contact created successfully!" });
     } else {
       res.status(400).json({ message: "invalid data" });
       throw new Error(`Invalid data`);
@@ -60,9 +74,8 @@ const createContact = asyncHandler(async (req, res) => {
 
 // updateContact controller
 // route   /contacts/:email
-// request  PUT
+// request  PATCH
 const updateContact = asyncHandler(async (req, res) => {
-  // const userEmail = req.params.email;
   const { contactID, name, email, phone, gender } = req.body;
 
   try {
@@ -93,4 +106,4 @@ const updateContact = asyncHandler(async (req, res) => {
   }
 });
 
-export { createContact, getContacts, updateContact };
+export { createContact, getContacts, updateContact, getUser };
