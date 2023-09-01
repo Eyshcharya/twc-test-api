@@ -10,15 +10,15 @@ import {
   getContacts,
   createContact,
   updateContact,
+  getUser,
 } from "../Controllers/dataController.js";
 
 router.post("/register", userRegister);
 router.post("/login", userLogin);
-router
-  .route("/contacts/:email")
-  .get(getContacts)
-  .post(createContact)
-  .patch(updateContact);
-router.route("/").post(userLogout);
+
+router.route("/").put(userLogout).post(getUser);
+
+router.post("/contacts/new", createContact);
+router.route("/contacts/:userID").patch(updateContact).get(getContacts);
 
 export default router;
