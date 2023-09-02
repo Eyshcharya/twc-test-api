@@ -8,6 +8,8 @@ This is the Back-end of the application which has been built using Node.js.
 ## Note
 Backend for this project was implemented some months after the implementation of the Frontend. This was due to my lack of knowledge about the backend development, At the time I was building the front-end. Now I have comparatively higher experience and knwoledge in backend development and I eager to learn more.
 
+Other than that, I am currently learning JWT authentication. Eventhough JWT's aren't officially implemented here, you might find fragments of commented code related to JWT Authentication here.
+
 ## How to run the application
 1.Clone the repository and navigate to the backend directory
 
